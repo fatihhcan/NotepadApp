@@ -11,9 +11,10 @@ import com.example.noteapp.R
 import com.example.noteapp.db.Note
 import com.example.noteapp.db.NoteDatabase
 import kotlinx.android.synthetic.main.fragment_add_note.*
+import kotlinx.coroutines.launch
 
 
-class AddNoteFragment : Fragment() {
+class AddNoteFragment : BaseFragment() {
 
 
     override fun onCreateView(
@@ -44,27 +45,17 @@ class AddNoteFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val note = Note(noteTitle, noteBody)
-            saveNote(note)
+            launch {
+                val note = Note(noteTitle, noteBody)
+                context?.let {
+                    NoteDatabase(it).getNoteDao().addNote(note)
+                    it.toast("Note Saved")
+                }
+            }
+
 
         }
     }
 
-    private fun saveNote(note:Note){
-        class SaveNote : AsyncTask<Void, Void, Void>(){
 
-            override fun doInBackground(vararg p0: Void?): Void? {
-                NoteDatabase(requireActivity()).getNoteDao().addNote(note)
-                return null
-            }
-
-            override fun onPostExecute(result: Void?) {
-                super.onPostExecute(result)
-
-                Toast.makeText(activity, "Note Saved", Toast.LENGTH_LONG).show()
-            }
-
-        }
-        SaveNote().execute()
-    }
 }
