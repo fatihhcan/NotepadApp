@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
 import com.example.noteapp.R
+import com.example.noteapp.db.NoteDatabase
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.coroutines.launch
 
 
 class HomeFragment : BaseFragment() {
@@ -23,6 +25,13 @@ class HomeFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        launch {
+            context?.let {
+                val notes = NoteDatabase(it).getNoteDao().getAllNotes()
+
+            }
+        }
 
         button_add.setOnClickListener {
 
